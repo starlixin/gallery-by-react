@@ -19,7 +19,7 @@ import React from 'react';
  * 获取区间内的一个随机值
  */
   function getRangeRandom(low,high){
-    return Math.floor(Mach.random()*(high-low)+low)
+    return Math.floor(Math.random()*(high-low)+low)
   }
 
 var ImgFigure= React.createClass({
@@ -30,7 +30,6 @@ var ImgFigure= React.createClass({
     if(this.props.arrange.pos){
       styleObj=this.props.arrange.pos;
     }
-    console.log(this.props.data);
     return (
         <figure className="img-figure" style={styleObj}>
           <img src={this.props.data.imageURL}
@@ -53,17 +52,17 @@ class AppComponent extends React.Component {
       leftSecX:[0,0],
       rightSecX:[0,0],
       y:[0,0]
-      }
-    vPosRange:{ // 垂直方向的取值范围
+      },
+      vPosRange:{ // 垂直方向的取值范围
       x:[0,0],
       topY:[0,0]
       }
-    },
+    }
   /*
   *重新布局图片
   * @param centerIndex 指定居中排布哪个图片
    */
-  rearrange:function(centerIndex){
+  rearrange(centerIndex){
       var imgsArrangeArr= this.state.imgsArrangeArr,
         Constant= this.Constant,
         centerPos= Constant.centerPos,
@@ -93,7 +92,7 @@ class AppComponent extends React.Component {
             top:getRangeRandom(vposRangeTopY[0],vposRangeTopY[1]),
             left:getRangeRandom(vPosRangeX[0],vPosRangeX[1])
           }
-        })
+        });
        //布局两侧的图片
           for(var i=0,j=imgsArrangeArr.length,k=j / 2;i<j;i++){
            var hPosRangeLORX=null;
@@ -115,23 +114,16 @@ class AppComponent extends React.Component {
           this.setState({
             imgsArrangeArr:imgsArrangeArr
           });
-},
+  }
 
-  getInitialState: function(){
+  getInitialState(){
     return {
-      imgsArrangeArr:[
-        //{
-        //  pos:{
-        //    left:'0',
-        //    top:'0'
-        //  }
-        //}
-      ]
+      imgsArrangeArr:[]
     };
-  },
+  }
 
   //组件加载以后，为每张图片计算其位置的范围
-  componentDidMount:function(){
+  componentDidMount(){
 
     //拿到舞台的大小
       var stageDOM = React.findDOMNode(this.refs.stage),
@@ -180,10 +172,9 @@ class AppComponent extends React.Component {
         }
       }
       imgFigures.push(
-        <ImgFigure data={value}
-                   refs={"imgFigure"+index}
-                   arrange ={this.state.imgsArrangeArr[index]} />
-        )
+        <ImgFigure data ={value}
+                   refs = {'imgFigure' + index}
+                   arrange ={this.state.imgsArrangeArr[index]} />)
     }.bind(this));
     return (
       <section className="stage" refs="stage">
