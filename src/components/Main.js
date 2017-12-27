@@ -30,6 +30,7 @@ import ReactDOM from 'react-dom';
   return (Math.random()>0.5?'':'-')+ Math.floor(Math.random()*30);
 }
 
+//图片组件
 var ImgFigure= React.createClass({
   /**
    * imgFigure的点击处理函数
@@ -76,7 +77,33 @@ var ImgFigure= React.createClass({
     );
   }
 })
-
+//控制组件
+var ControllerUnit = React.createClass({
+  handleClick:function(e){
+    //如果点击的是当前正在选中态的按钮，则翻转图片，否则对应图片居中
+    if(this.props.arrange.isCenter){
+      this.props.inverse();
+    }else {
+      this.props.center();
+    }
+    e.preventDefault();
+    e.stopPropagation();
+  },
+  render:function(){
+    var controllerUnitClassName = "controller-unit";
+    //如果对应的是居中的图片，显示按钮的居中态
+    if(this.props.arrange.isCenter){
+      controllerUnitClassName +=" is-center";
+      //如果同时对应的是翻转图片，显示按钮的翻转态
+      if(this.props.arrange.isInverse){
+        controllerUnitClassName += " is-inverse";
+      }
+    }
+    return (
+      <span className={controllerUnitClassName} onClick={this.handleClick}></span>
+    )
+  }
+})
 class AppComponent extends React.Component {
 
   constructor(props){
@@ -84,7 +111,7 @@ class AppComponent extends React.Component {
     this.Constant={
       centerPos:{
         left:0,
-          right:0
+        top:0
       },
       hPosRange:{//水平方向的取值范围
         leftSecX:[0,0],
@@ -154,7 +181,7 @@ class AppComponent extends React.Component {
         vPosRangeX = vPosRange.x,
 
         imgsArrangeTopArr=[],
-        topImgNum =Math.floor(Math.random()*2),//取一个或不取
+        topImgNum =Math.floor(Math.random()*3),//取一个或不取
          topImgSpliceIndex =0,
         imgsArrangeCenterArr=imgsArrangeArr.splice(centerIndex,1);
 
@@ -205,7 +232,7 @@ class AppComponent extends React.Component {
             imgsArrangeArr.splice(topImgSpliceIndex,0,imgsArrangeTopArr[0]);
           }
           imgsArrangeArr.splice(centerIndex,0,imgsArrangeCenterArr[0]);
-    console.log(imgsArrangeArr);
+    debugger;
           this.setState({
             imgsArrangeArr:imgsArrangeArr
           });
@@ -238,7 +265,7 @@ class AppComponent extends React.Component {
       //计算中心图片的位置点
       this.Constant.centerPos = {
         left:halfStageW-halfImgW,
-        top:halfStageH - halfStageH
+        top:halfStageH - halfImgH
       }
       //计算左侧、右侧区域图片排布位置的取值范围
       this.Constant.hPosRange.leftSecX[0] = -halfImgW;
@@ -277,6 +304,11 @@ class AppComponent extends React.Component {
                     inverse ={this.inverse(index)}
                     center={this.center(index)}
         />)
+      controllerUnits.push(<ControllerUnit
+        arrange ={this.state.imgsArrangeArr[index]}
+        inverse ={this.inverse(index)}
+        center={this.center(index)}
+      />);
     }.bind(this));
     return (
       <section className="stage" ref="stage">
