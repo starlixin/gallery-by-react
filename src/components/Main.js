@@ -168,7 +168,6 @@ class AppComponent extends React.Component {
   * @param centerIndex 指定居中排布哪个图片
    */
   rearrange(centerIndex){
-    console.log('rearrange function');
       var imgsArrangeArr= this.state.imgsArrangeArr;
        var Constant= this.Constant,
         centerPos= Constant.centerPos,
@@ -181,7 +180,7 @@ class AppComponent extends React.Component {
         vPosRangeX = vPosRange.x,
 
         imgsArrangeTopArr=[],
-        topImgNum =Math.floor(Math.random()*3),//取一个或不取
+        topImgNum =Math.floor(Math.random()*2),//取一个或不取
          topImgSpliceIndex =0,
         imgsArrangeCenterArr=imgsArrangeArr.splice(centerIndex,1);
 
@@ -232,23 +231,16 @@ class AppComponent extends React.Component {
             imgsArrangeArr.splice(topImgSpliceIndex,0,imgsArrangeTopArr[0]);
           }
           imgsArrangeArr.splice(centerIndex,0,imgsArrangeCenterArr[0]);
-    debugger;
           this.setState({
             imgsArrangeArr:imgsArrangeArr
           });
   }
 
-  //getInitialState(){
-  //  return {
-  //    imgsArrangeArr:[]
-  //  };
-  //}
 
   //组件加载以后，为每张图片计算其位置的范围
   componentDidMount(){
 
     //拿到舞台的大小
-    console.log('componentDidMount function');
       var stageDOM = ReactDOM.findDOMNode(this.refs.stage),
         stageW = stageDOM.scrollWidth,
         stageH = stageDOM.scrollHeight,
@@ -260,8 +252,7 @@ class AppComponent extends React.Component {
         imgH = imgFigureDOM.scrollHeight,
         halfImgW = Math.ceil(imgW/2),
         halfImgH = Math.ceil(imgH/2);
-    console.log(stageH);
-    console.log(imgH);
+
       //计算中心图片的位置点
       this.Constant.centerPos = {
         left:halfStageW-halfImgW,
@@ -277,8 +268,8 @@ class AppComponent extends React.Component {
       //计算上侧区域图片排布位置的取值范围
       this.Constant.vPosRange.topY[0] = -halfImgH;
       this.Constant.vPosRange.topY[1] = halfStageH-halfImgH*3;
-      this.Constant.vPosRange.x[0] = halfImgW -imgW;
-      this.Constant.vPosRange.x[1] = halfImgW;
+      this.Constant.vPosRange.x[0] = halfStageW -imgW;
+      this.Constant.vPosRange.x[1] = halfStageW;
       this.rearrange(0);
 
   }
