@@ -54,8 +54,8 @@ var ImgFigure= React.createClass({
 
     //如果图片的旋转角度有值且不为0，添加旋转角度
     if(this.props.arrange.rotate){
-      ['-moz-','-ms-','-webkit-',''].forEach(function(value){
-        styleObj[value+'transform'] = 'rotate('+
+      ['MozTransform','msTransform','WebkitTransform','transform'].forEach(function(value){
+        styleObj[value] = 'rotate('+
           this.props.arrange.rotate+'deg)';
       }.bind(this))
     }
@@ -289,13 +289,13 @@ class AppComponent extends React.Component {
         }
       }
       imgFigures.push(
-        <ImgFigure data ={value}
+        <ImgFigure key={index} data ={value}
                    ref = {'imgFigure' + index}
                    arrange ={this.state.imgsArrangeArr[index]}
                     inverse ={this.inverse(index)}
                     center={this.center(index)}
         />)
-      controllerUnits.push(<ControllerUnit
+      controllerUnits.push(<ControllerUnit key={index}
         arrange ={this.state.imgsArrangeArr[index]}
         inverse ={this.inverse(index)}
         center={this.center(index)}
